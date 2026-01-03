@@ -1,0 +1,238 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {}
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "011be4d2-0683-4a05-98dd-66d75e494d6d",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://serpapi.com/search.json",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "serpApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "engine",
+              "value": "google"
+            },
+            {
+              "name": "q",
+              "value": "(site:linkedin.com OR site:x.com OR instagram.com) \"hackathon\" AND \"2026\" Malaysia"
+            },
+            {
+              "name": "tbs",
+              "value": "qdr:w"
+            },
+            {
+              "name": "num",
+              "value": "20"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        384,
+        0
+      ],
+      "id": "a987f023-9236-42db-a88f-3b2b06b9182f",
+      "name": "HTTP Request",
+      "credentials": {
+        "serpApi": {
+          "id": "NMTsZM5ciR6KSfcr",
+          "name": "SerpAPI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1pYvwae4bGWTBz5TNpUeSENoPJhU4yHwjZ5QKbPfr0WI",
+          "mode": "list",
+          "cachedResultName": "n8n-hackathon-news",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pYvwae4bGWTBz5TNpUeSENoPJhU4yHwjZ5QKbPfr0WI/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pYvwae4bGWTBz5TNpUeSENoPJhU4yHwjZ5QKbPfr0WI/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date": "={{ $now.format('yyyy-MM-dd HH:mm') }}",
+            "URL": "={{ $json.link }}",
+            "Title": "={{ $json.title }}",
+            "Source": "={{ $json.source }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Title",
+              "displayName": "Title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "URL",
+              "displayName": "URL",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Source",
+              "displayName": "Source",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        928,
+        0
+      ],
+      "id": "838ed2a5-cef0-488c-b1ef-116b01ea85aa",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "EIXrspciPRx4QPxs",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "organic_results",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        576,
+        0
+      ],
+      "id": "88e3ac50-15c8-4ba5-9ef2-df9569a7fd25",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "operation": "removeItemsSeenInPreviousExecutions",
+        "dedupeValue": "={{ $json.link }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.removeDuplicates",
+      "typeVersion": 2,
+      "position": [
+        752,
+        0
+      ],
+      "id": "6225fc09-de08-489a-939c-50f8f7a24de6",
+      "name": "Remove Duplicates1"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Remove Duplicates1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Duplicates1": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "0417726e-1c5c-404e-912b-8a4211a37441",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c6c5d29aa29c01e1e6180619dfff0a335e48a46d0f0810c1f805182ca08e8598"
+  },
+  "id": "6cDpZYk32F5ARwZ0",
+  "tags": []
+}
