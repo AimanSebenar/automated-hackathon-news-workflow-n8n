@@ -56,7 +56,7 @@
       "name": "HTTP Request",
       "credentials": {
         "serpApi": {
-          "id": "NMTsZM5ciR6KSfcr",
+          "id": "YOUR_SERPAPI_ID",
           "name": "SerpAPI account"
         }
       }
@@ -66,10 +66,10 @@
         "operation": "append",
         "documentId": {
           "__rl": true,
-          "value": "1pYvwae4bGWTBz5TNpUeSENoPJhU4yHwjZ5QKbPfr0WI",
+          "value": "YOUR_GOOGLESHEETDOC_ID",
           "mode": "list",
           "cachedResultName": "n8n-hackathon-news",
-          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pYvwae4bGWTBz5TNpUeSENoPJhU4yHwjZ5QKbPfr0WI/edit?usp=drivesdk"
+          "cachedResultUrl": "YOUR_GOOGLESHEET_URL"
         },
         "sheetName": {
           "__rl": true,
@@ -142,7 +142,7 @@
       "name": "Append row in sheet",
       "credentials": {
         "googleSheetsOAuth2Api": {
-          "id": "EIXrspciPRx4QPxs",
+          "id": "YOUR_GOOGLEOAUTH_ID",
           "name": "Google Sheets account"
         }
       }
@@ -229,10 +229,6 @@
     "executionOrder": "v1"
   },
   "versionId": "0417726e-1c5c-404e-912b-8a4211a37441",
-  "meta": {
-    "templateCredsSetupCompleted": true,
-    "instanceId": "c6c5d29aa29c01e1e6180619dfff0a335e48a46d0f0810c1f805182ca08e8598"
-  },
   "id": "6cDpZYk32F5ARwZ0",
   "tags": []
 }
